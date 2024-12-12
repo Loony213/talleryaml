@@ -21,12 +21,3 @@ jobs:
           script: |
             scp hola.html ec2-user@${{ secrets.EC2_QA }}:/var/www/html
             scp hola.html ec2-user@${{ secrets.EC2_QA2 }}:/var/www/html
-      - name: Deploy to EC2 Instances
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.EC2_HOST }}, ${{ secrets.EC2_HOST2 }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            scp hola.html ec2-user@${{ secrets.EC2_HOST }}:/var/www/html
-            scp hola.html ec2-user@${{ secrets.EC2_HOST2 }}:/var/www/html
