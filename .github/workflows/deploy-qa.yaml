@@ -1,0 +1,32 @@
+name: Deploy to QA
+
+on:
+  push:
+    branches:
+      - QA
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Deploy to QA
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_QA }}, ${{ secrets.EC2_QA2 }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_QA }}
+          script: |
+            scp hola.html ec2-user@${{ secrets.EC2_QA }}:/var/www/html
+            scp hola.html ec2-user@${{ secrets.EC2_QA2 }}:/var/www/html
+      - name: Deploy to EC2 Instances
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}, ${{ secrets.EC2_HOST2 }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            scp hola.html ec2-user@${{ secrets.EC2_HOST }}:/var/www/html
+            scp hola.html ec2-user@${{ secrets.EC2_HOST2 }}:/var/www/html
